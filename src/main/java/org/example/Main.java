@@ -65,24 +65,24 @@ public class Main {
 
             try {
                 assert connection != null;
-                try (PreparedStatement statement = connection.prepareStatement(insertDataQuery)) {
-                    statement.setString(1, region);
-                    statement.setString(2, country);
-                    statement.setString(3, totalCases);
-                    statement.setString(4, totalTests);
-                    statement.setString(5, activeCases);
-                    statement.executeUpdate();
 
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
+                PreparedStatement statement = connection.prepareStatement(insertDataQuery);
+                statement.setString(1, region);
+                statement.setString(2, country);
+                statement.setString(3, totalCases);
+                statement.setString(4, totalTests);
+                statement.setString(5, activeCases);
+                statement.executeUpdate();
+
+            } catch (Exception e) {
+                continue;
             }
         }
     }
 
     static void createTable(Connection connection) throws SQLException {
         Statement statement = connection.createStatement();
-        String createTableQuery = "CREATE TABLE IF NOT EXISTS covidInfo (region TEXT, country TEXT, " +
+        String createTableQuery = "CREATE TABLE IF NOT EXISTS covidInfo (region TEXT, country TEXT UNIQUE, " +
                 "totalCases TEXT, totalTests TEXT, activeCases TEXT)";
         statement.executeUpdate(createTableQuery);
         System.out.println("Database created successfully.");
